@@ -46,7 +46,7 @@ const config = {
 			},
 		],
 	],
-	repositoryUrl: "https://github.com/adminElsikora/X-Captcha-Client.git",
+	repositoryUrl: "https://github.com/ElsiKora/X-Captcha-Client.git",
 };
 
 const isPrereleaseBranch = config.branches.some((b) => typeof b === "object" && branch.includes(b.name) && b.prerelease);
