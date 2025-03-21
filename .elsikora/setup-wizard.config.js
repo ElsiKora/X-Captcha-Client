@@ -50,7 +50,7 @@ export default {
 		mainBranch: "main",
 		preReleaseBranch: "dev",
 		preReleaseChannel: "beta",
-		repositoryUrl: "https://github.com/adminElsikora/X-Captcha-Client.git",
+		repositoryUrl: "https://github.com/ElsiKora/X-Captcha-Client.git",
 	},
 	stylelint: {
 		isEnabled: true,
