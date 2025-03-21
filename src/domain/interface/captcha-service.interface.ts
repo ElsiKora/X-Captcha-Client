@@ -1,4 +1,6 @@
-import type { ICaptchaChallenge, ICaptchaValidationRequest, ICaptchaValidationResult } from "./captcha.interface";
+import type { ICaptchaChallenge } from "./captcha-challenge.interface";
+import type { ICaptchaValidationRequest } from "./captcha-validation-request.interface";
+import type { ICaptchaValidationResult } from "./captcha-validation-result.interface";
 
 /**
  * Interface for captcha service
