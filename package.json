@@ -34,6 +34,7 @@
 		"lint:types": "tsc --noEmit",
 		"lint:types:fix": "tsc --noEmit --skipLibCheck",
 		"prepare": "husky",
+		"release": "semantic-release",
 		"test": "jest",
 		"typecheck": "tsc --noEmit"
 	},
