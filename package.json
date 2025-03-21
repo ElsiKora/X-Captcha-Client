@@ -1,6 +1,6 @@
 {
 	"name": "@elsikora/x-captcha-client",
-	"version": "1.0.0-dev.2",
+	"version": "1.0.0",
 	"description": "Client library for X-Captcha service",
 	"keywords": [
 		"captcha",
