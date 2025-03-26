@@ -1,1 +1,1 @@
-export * from "./captcha.service";
+export * from "./challenge.service";

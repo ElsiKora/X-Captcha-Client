@@ -1,1 +1,1 @@
-export * from "./captcha-api-client";
+export * from "./challenge-api-client";

@@ -1,17 +1,25 @@
-import type { ICaptchaChallenge, ICaptchaValidationRequest, ICaptchaValidationResult } from "../../domain";
+import type { IChallenge, IChallengeSolveRequest, IChallengeSolveResponse, IChallengeValidationRequest, IChallengeValidationResult } from "../../domain";
 
 /**
  * Interface for captcha API client
  */
-export interface ICaptchaApiClient {
+export interface IChallengeApiClient {
 	/**
-	 * Fetch a new captcha challenge from the server
+	 * Create a new captcha challenge
+	 * @param type - The type of challenge to create
 	 */
-	fetchChallenge(): Promise<ICaptchaChallenge>;
+	createChallenge(type: string): Promise<IChallenge>;
 
 	/**
-	 * Validate a captcha challenge response
+	 * Solve a captcha challenge
+	 * @param challengeId - The challenge ID
+	 * @param request - The solve request
+	 */
+	solveChallenge(challengeId: string, request: IChallengeSolveRequest): Promise<IChallengeSolveResponse>;
+
+	/**
+	 * Verify a captcha challenge token
 	 * @param request - The validation request
 	 */
-	validateChallenge(request: ICaptchaValidationRequest): Promise<ICaptchaValidationResult>;
+	verifyChallenge(request: IChallengeValidationRequest): Promise<IChallengeValidationResult>;
 }

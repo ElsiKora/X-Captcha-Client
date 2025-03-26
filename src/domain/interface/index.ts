@@ -1,4 +1,6 @@
-export type * from "./captcha-challenge.interface";
-export type * from "./captcha-service.interface";
-export type * from "./captcha-validation-request.interface";
-export type * from "./captcha-validation-result.interface";
+export type * from "./challenge-challenge.interface";
+export type * from "./challenge-service.interface";
+export type * from "./challenge-solve-request.interface";
+export type * from "./challenge-solve-response.interface";
+export type * from "./challenge-validation-request.interface";
+export type * from "./challenge-validation-result.interface";

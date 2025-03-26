@@ -3,9 +3,12 @@ import type { ECaptchaType } from "../enum";
 /**
  * Interface representing captcha challenge data
  */
-export interface ICaptchaChallenge {
+export interface IChallenge {
 	createdAt: Date;
-	expiresAt: Date;
+	data?: object;
 	id: string;
+	isSolved?: boolean;
+	token?: string;
 	type: ECaptchaType;
+	updatedAt?: Date;
 }
