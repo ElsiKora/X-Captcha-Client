@@ -1,7 +1,7 @@
 # ElsiKora TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FElsiKora%2FX-Captcha-Client)
-[![npm shield](https://img.shields.io/npm/v/)](https://www.npmjs.com/package/)
+[![npm shield](https://img.shields.io/npm/v/@elsikora/x-captcha-client)](https://www.npmjs.com/package/@elsikora/x-captcha-client)
 
 The ElsiKora TypeScript library provides convenient access to the ElsiKora API from TypeScript.
 
@@ -398,7 +398,7 @@ The API responses can support multiple languages if the X-Captcha service provid
 ## Installation
 
 ```sh
-npm i -s
+npm i -s @elsikora/x-captcha-client
 ```
 
 ## Reference
@@ -410,7 +410,7 @@ A full reference for this library is available [here](./reference.md).
 Instantiate and use the client with the following:
 
 ```typescript
-import { ElsiKoraApiClient } from "";
+import { ElsiKoraApiClient } from "@elsikora/x-captcha-client";
 
 const client = new ElsiKoraApiClient({ apiKey: "YOUR_API_KEY", secretKey: "YOUR_SECRET_KEY" });
 await client.challenge.challengeControllerSolve("ee2e5799-8df3-4a80-bed0-25f30abbe744", {
@@ -427,7 +427,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { ElsiKoraApi } from "ElsiKoraApi";
+import { ElsiKoraApi } from "@elsikora/x-captcha-client";
 
 const request: ElsiKoraApi.ChallengeSolveRequestBodyDto = {
     ...
@@ -440,7 +440,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { ElsiKoraApiError } from "ElsiKoraApi";
+import { ElsiKoraApiError } from "@elsikora/x-captcha-client";
 
 try {
     await client.challenge.challengeControllerSolve(...);
@@ -527,7 +527,7 @@ The SDK provides a way for your to customize the underlying HTTP client / Fetch 
 unsupported environment, this provides a way for you to break glass and ensure the SDK works.
 
 ```typescript
-import { ElsiKoraApiClient } from "ElsiKoraApi";
+import { ElsiKoraApiClient } from "@elsikora/x-captcha-client";
 
 const client = new ElsiKoraApiClient({
     ...
