@@ -1,0 +1,572 @@
+types:
+  ChallengeCreateBodyclient:
+    properties: {}
+    source:
+      openapi: openapi.yaml
+  ChallengeCreateResponse:
+    properties:
+      createdAt:
+        access: read-only
+        docs: Challenge creation date
+        type: optional<datetime>
+      data:
+        access: read-only
+        docs: Challenge data
+        type: optional<ChallengeCreateResponseData>
+      id:
+        access: read-only
+        docs: Challenge identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      type:
+        access: read-only
+        docs: Challenge type
+        type: optional<ChallengeCreateResponseType>
+      updatedAt:
+        access: read-only
+        docs: Challenge last update date
+        type: optional<datetime>
+    source:
+      openapi: openapi.yaml
+  ChallengeCreateResponseData:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge data
+    source:
+      openapi: openapi.yaml
+    union:
+      click: ChallengeCreateResponseDataClick
+      pow: ChallengeCreateResponseDataPow
+  ChallengeCreateResponseDataClick:
+    properties:
+      challenge:
+        access: read-only
+        docs: Challenge data click challenge
+        type: optional<boolean>
+    source:
+      openapi: openapi.yaml
+  ChallengeCreateResponseDataPow:
+    properties:
+      challenge:
+        access: read-only
+        docs: Challenge data PoW challenge
+        type: optional<string>
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+      difficulty:
+        access: read-only
+        docs: Challenge data difficulty
+        type: optional<integer>
+        validation:
+          max: 32
+          min: 0
+    source:
+      openapi: openapi.yaml
+  ChallengeCreateResponseType:
+    docs: Challenge type
+    enum:
+      - click
+      - pow
+    inline: true
+    source:
+      openapi: openapi.yaml
+  ChallengeSolveResponse:
+    properties:
+      token:
+        access: read-only
+        docs: Challenge solution token
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBody:
+    properties:
+      client:
+        docs: Challenge client
+        type: string
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      data:
+        docs: Challenge data
+        type: ChallengeUpdateBodyData
+      isSolved:
+        docs: Challenge solved state
+        type: boolean
+      solution:
+        docs: Challenge solution
+        type: ChallengeUpdateBodySolution
+      token:
+        docs: Challenge solution token
+        type: string
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      type:
+        docs: Challenge type
+        type: ChallengeUpdateBodyType
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodyclient:
+    properties: {}
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodyData:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge data
+    source:
+      openapi: openapi.yaml
+    union:
+      click: ChallengeUpdateBodyDataClick
+      pow: ChallengeUpdateBodyDataPow
+  ChallengeUpdateBodyDataClick:
+    properties:
+      challenge:
+        docs: Challenge data click challenge
+        type: boolean
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodyDataPow:
+    properties:
+      challenge:
+        docs: Challenge data PoW challenge
+        type: string
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+      difficulty:
+        docs: Challenge data difficulty
+        type: integer
+        validation:
+          max: 32
+          min: 0
+          multipleOf: 1
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodySolution:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge solution
+    source:
+      openapi: openapi.yaml
+    union:
+      click: ChallengeUpdateBodySolutionClick
+      pow: ChallengeUpdateBodySolutionPow
+  ChallengeUpdateBodySolutionClick:
+    properties:
+      data:
+        docs: Challenge solution click data
+        type: boolean
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodySolutionPow:
+    properties:
+      hash:
+        docs: Challenge solution PoW hash
+        type: string
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+      nonce:
+        docs: Challenge solution PoW nonce
+        type: string
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateBodyType:
+    docs: Challenge type
+    enum:
+      - click
+      - pow
+    inline: true
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateRequest:
+    properties:
+      id:
+        docs: Challenge identifier
+        type: string
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponse:
+    properties:
+      client:
+        access: read-only
+        docs: Challenge client
+        type: optional<ChallengeUpdateResponseClient>
+      createdAt:
+        access: read-only
+        docs: Challenge creation date
+        type: optional<datetime>
+      data:
+        access: read-only
+        docs: Challenge data
+        type: optional<ChallengeUpdateResponseData>
+      id:
+        access: read-only
+        docs: Challenge identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      isSolved:
+        access: read-only
+        docs: Challenge solved state
+        type: optional<boolean>
+      solution:
+        access: read-only
+        docs: Challenge solution
+        type: optional<ChallengeUpdateResponseSolution>
+      token:
+        access: read-only
+        docs: Challenge solution token
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      type:
+        access: read-only
+        docs: Challenge type
+        type: optional<ChallengeUpdateResponseType>
+      updatedAt:
+        access: read-only
+        docs: Challenge last update date
+        type: optional<datetime>
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseClient:
+    properties:
+      id:
+        access: read-only
+        docs: Challenge identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseData:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge data
+    source:
+      openapi: openapi.yaml
+    union:
+      click: ChallengeUpdateResponseDataClick
+      pow: ChallengeUpdateResponseDataPow
+  ChallengeUpdateResponseDataClick:
+    properties:
+      challenge:
+        access: read-only
+        docs: Challenge data click challenge
+        type: optional<boolean>
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseDataPow:
+    properties:
+      challenge:
+        access: read-only
+        docs: Challenge data PoW challenge
+        type: optional<string>
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+      difficulty:
+        access: read-only
+        docs: Challenge data difficulty
+        type: optional<integer>
+        validation:
+          max: 32
+          min: 0
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseSolution:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge solution
+    source:
+      openapi: openapi.yaml
+    union:
+      click: ChallengeUpdateResponseSolutionClick
+      pow: ChallengeUpdateResponseSolutionPow
+  ChallengeUpdateResponseSolutionClick:
+    properties:
+      data:
+        access: read-only
+        docs: Challenge solution click data
+        type: optional<boolean>
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseSolutionPow:
+    properties:
+      hash:
+        access: read-only
+        docs: Challenge solution PoW hash
+        type: optional<string>
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+      nonce:
+        access: read-only
+        docs: Challenge solution PoW nonce
+        type: optional<string>
+        validation:
+          maxLength: 32
+          minLength: 32
+          pattern: ^[a-f0-9]{32}
+    source:
+      openapi: openapi.yaml
+  ChallengeUpdateResponseType:
+    docs: Challenge type
+    enum:
+      - click
+      - pow
+    inline: true
+    source:
+      openapi: openapi.yaml
+  ChallengeVerifyResponse:
+    properties:
+      isSolved:
+        access: read-only
+        docs: Challenge solved status
+        type: optional<boolean>
+    source:
+      openapi: openapi.yaml
+  ExceptionBadRequest:
+    properties:
+      correlationID:
+        access: read-only
+        docs: Correlation identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      error:
+        access: read-only
+        docs: Error name
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      message:
+        access: read-only
+        docs: Error message
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      statusCode:
+        access: read-only
+        docs: Error status code
+        type: optional<double>
+      timestamp:
+        access: read-only
+        docs: Error timestamp
+        type: optional<long>
+    source:
+      openapi: openapi.yaml
+  ExceptionInternalServerError:
+    properties:
+      correlationID:
+        access: read-only
+        docs: Correlation identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      error:
+        access: read-only
+        docs: Error name
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      message:
+        access: read-only
+        docs: Error message
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      statusCode:
+        access: read-only
+        docs: Error status code
+        type: optional<double>
+      timestamp:
+        access: read-only
+        docs: Error timestamp
+        type: optional<long>
+    source:
+      openapi: openapi.yaml
+  ExceptionNotFound:
+    properties:
+      correlationID:
+        access: read-only
+        docs: Correlation identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      error:
+        access: read-only
+        docs: Error name
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      message:
+        access: read-only
+        docs: Error message
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      statusCode:
+        access: read-only
+        docs: Error status code
+        type: optional<double>
+      timestamp:
+        access: read-only
+        docs: Error timestamp
+        type: optional<long>
+    source:
+      openapi: openapi.yaml
+  ExceptionUnauthorized:
+    properties:
+      correlationID:
+        access: read-only
+        docs: Correlation identifier
+        type: optional<string>
+        validation:
+          format: uuid
+          maxLength: 36
+          minLength: 36
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      error:
+        access: read-only
+        docs: Error name
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      message:
+        access: read-only
+        docs: Error message
+        type: optional<string>
+        validation:
+          maxLength: 64
+          minLength: 3
+          pattern: ^[a-zA-Z_ ]{3,64}$
+      statusCode:
+        access: read-only
+        docs: Error status code
+        type: optional<double>
+      timestamp:
+        access: read-only
+        docs: Error timestamp
+        type: optional<long>
+    source:
+      openapi: openapi.yaml
+errors:
+  BadRequestError:
+    docs: Bad Request
+    examples:
+      - value:
+          correlationID: cdc3ee0e-e2bb-41d0-9dec-4b84340f7298
+          error: BadRequest
+          message: Error message
+          statusCode: 400
+          timestamp: 1743042540524
+    status-code: 400
+    type: ExceptionBadRequest
+  InternalServerError:
+    docs: Internal Server Error
+    examples:
+      - value:
+          correlationID: f714c092-e2c2-4888-80a7-568639c97375
+          error: InternalServerError
+          message: Error message
+          statusCode: 500
+          timestamp: 1743042540526
+    status-code: 500
+    type: ExceptionInternalServerError
+  NotFoundError:
+    docs: Not Found
+    examples:
+      - value:
+          correlationID: 2cacc9ac-5b80-4d0b-b111-437cd1eb2076
+          error: NotFound
+          message: Error message
+          statusCode: 404
+          timestamp: 1743042540523
+    status-code: 404
+    type: ExceptionNotFound
+  UnauthorizedError:
+    docs: Unauthorized
+    examples:
+      - value:
+          correlationID: b2c5fd52-9c66-4689-b413-b8071c78ec78
+          error: Unauthorized
+          message: Error message
+          statusCode: 401
+          timestamp: 1743042540525
+    status-code: 401
+    type: ExceptionUnauthorized

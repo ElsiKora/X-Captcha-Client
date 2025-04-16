@@ -12,3 +12,11 @@ export interface IChallenge {
 	type: ECaptchaType;
 	updatedAt?: Date;
 }
+
+/**
+ * Interface for PoW challenge data
+ */
+export interface IPowChallengeData {
+	prefix: string;
+	difficulty: number;
+}

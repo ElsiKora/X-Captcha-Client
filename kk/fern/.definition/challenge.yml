@@ -1,0 +1,143 @@
+imports:
+  root: __package__.yml
+types:
+  ChallengeCreateBodyType:
+    docs: Challenge type
+    enum:
+      - click
+      - pow
+    inline: true
+    source:
+      openapi: openapi.yaml
+  ChallengeSolveRequestBodySolution:
+    base-properties: {}
+    discriminant: type
+    docs: Challenge solution
+    source:
+      openapi: openapi.yaml
+    union:
+      click: root.ChallengeUpdateBodySolutionClick
+      pow: root.ChallengeUpdateBodySolutionPow
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      auth: true
+      display-name: Creating `Challenge`
+      docs: This method is used for creating `Challenge`
+      errors:
+        - root.UnauthorizedError
+        - root.InternalServerError
+      examples:
+        - request:
+            type: click
+          response:
+            body:
+              createdAt: '2025-01-01T00:00:00Z'
+              data:
+                challenge: true
+                type: click
+              id: cacae560-4b8f-45cb-88b3-f637fcd80d52
+              type: click
+              updatedAt: '2025-01-01T00:00:00Z'
+      method: POST
+      path: /v1/challenge
+      request:
+        body:
+          properties:
+            type:
+              docs: Challenge type
+              type: ChallengeCreateBodyType
+        content-type: application/json
+        name: ChallengeCreateBody
+      response:
+        docs: Success
+        status-code: 201
+        type: root.ChallengeCreateResponse
+      source:
+        openapi: openapi.yaml
+    solve:
+      auth: true
+      display-name: Solving `Challenge`
+      docs: This method is used for solving `Challenge`
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.NotFoundError
+        - root.InternalServerError
+      examples:
+        - path-parameters:
+            challenge: 81f6ca5b-bd35-4509-8fef-edf507f32bb1
+          request:
+            solution:
+              data: true
+              type: click
+          response:
+            body:
+              token: bec46ffd-d4e5-4756-a339-e9f298fe0865
+      method: POST
+      path: /v1/challenge/{challenge}/solve
+      path-parameters:
+        challenge:
+          docs: Challenge identifier
+          type: string
+      request:
+        body:
+          properties:
+            solution:
+              docs: Challenge solution
+              type: ChallengeSolveRequestBodySolution
+        content-type: application/json
+        name: ChallengeSolveRequestBody
+      response:
+        docs: Success
+        status-code: 200
+        type: root.ChallengeSolveResponse
+      source:
+        openapi: openapi.yaml
+    verify:
+      auth: true
+      display-name: Verifying `Challenge`
+      docs: This method is used for verifying `Challenge`
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.NotFoundError
+        - root.InternalServerError
+      examples:
+        - path-parameters:
+            challenge: e4e67668-4505-4321-8b7a-87b0b3fb0ba1
+          request:
+            token: 2e00ffd7-df0e-4b17-98ef-14f9c4e5b9e2
+          response:
+            body:
+              isSolved: true
+      method: POST
+      path: /v1/challenge/{challenge}/verify
+      path-parameters:
+        challenge:
+          docs: Challenge identifier
+          type: string
+      request:
+        body:
+          properties:
+            token:
+              docs: Challenge solution token
+              type: string
+              validation:
+                format: uuid
+                maxLength: 36
+                minLength: 36
+                pattern: >-
+                  ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+        content-type: application/json
+        name: ChallengeVerifyRequestBody
+      response:
+        docs: Success
+        status-code: 200
+        type: root.ChallengeVerifyResponse
+      source:
+        openapi: openapi.yaml
+  source:
+    openapi: openapi.yaml

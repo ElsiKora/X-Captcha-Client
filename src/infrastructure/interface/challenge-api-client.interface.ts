@@ -1,14 +1,14 @@
-import type { IChallenge, IChallengeSolveRequest, IChallengeSolveResponse, IChallengeValidationRequest, IChallengeValidationResult } from "../../domain";
+import type { ECaptchaType, IChallenge, IChallengeSolveRequest, IChallengeSolveResponse, IChallengeValidationRequest, IChallengeValidationResult } from "../../domain";
 
 /**
- * Interface for captcha API client
+ * Interface for challenge API client
  */
 export interface IChallengeApiClient {
 	/**
 	 * Create a new captcha challenge
 	 * @param type - The type of challenge to create
 	 */
-	createChallenge(type: string): Promise<IChallenge>;
+	createChallenge(type: ECaptchaType): Promise<IChallenge>;
 
 	/**
 	 * Solve a captcha challenge

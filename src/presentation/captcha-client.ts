@@ -1,7 +1,8 @@
-import type { ECaptchaType, IChallenge, IChallengeService, IChallengeSolveResponse, IChallengeValidationResult } from "../domain";
+import type { IChallenge, IChallengeService, IChallengeSolveResponse, IChallengeValidationResult, IPowChallengeData } from "../domain";
 
-import { ChallengeService } from "../application/service/challenge.service";
-import { ChallengeApiClient } from "../infrastructure";
+import { ChallengeService } from "../application";
+import { ECaptchaType } from "../domain/enum";
+import { ChallengeApiClient, PowSolver } from "../infrastructure";
 
 /**
  * Configuration options for the captcha client
@@ -28,6 +29,30 @@ export class CaptchaClient {
 			secretKey: config.secretKey,
 		});
 		this.SERVICE = new ChallengeService(apiClient);
+	}
+
+	/**
+	 * Create and automatically solve a PoW challenge
+	 * @returns {Promise<string>} The validation token
+	 */
+	async createAndSolvePowChallenge(): Promise<string> {
+		// Create a new PoW challenge
+		const challenge: IChallenge = await this.createChallenge(ECaptchaType.POW);
+
+		if (!challenge.data) {
+			throw new Error("Challenge data is missing");
+		}
+
+		// Cast the data to IPowChallengeData
+		const powData: IPowChallengeData = challenge.data as IPowChallengeData;
+
+		// Solve the challenge
+		const solution = await PowSolver.solve(powData);
+
+		// Submit the solution
+		const result = await this.solveChallenge(challenge.id, solution);
+
+		return result.token;
 	}
 
 	/**

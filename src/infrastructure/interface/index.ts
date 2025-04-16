@@ -1,1 +1,1 @@
-export type * from "./captcha-api-client.interface";
+export type * from "./challenge-api-client.interface";

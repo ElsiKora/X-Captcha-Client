@@ -1,8 +1,6 @@
 import type { IChallengeSolveRequest, IChallengeSolveResponse } from "../../domain";
 import type { IChallengeService } from "../../domain";
 import type { IChallenge } from "../../domain";
-import type { IChallengeValidationResult } from "../../domain";
-import type { IChallengeValidationRequest } from "../../domain";
 import type { ECaptchaType } from "../../domain/enum";
 import type { IChallengeApiClient } from "../../infrastructure";
 
@@ -33,18 +31,5 @@ export class ChallengeService implements IChallengeService {
 		};
 
 		return this.apiClient.solveChallenge(challengeId, request);
-	}
-
-	/**
-	 * Verify a captcha challenge token
-	 * @param {string} token - The validation token
-	 * @returns {Promise<IChallengeValidationResult>} The validation result
-	 */
-	async verifyChallenge(token: string): Promise<IChallengeValidationResult> {
-		const request: IChallengeValidationRequest = {
-			token,
-		};
-
-		return this.apiClient.verifyChallenge(request);
 	}
 }

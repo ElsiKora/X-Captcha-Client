@@ -1,0 +1,17 @@
+auth: publicAuthorization
+auth-schemes:
+  publicAuthorization:
+    header: X-Public-Key
+    name: apiKey
+    type: string
+default-environment: Default
+display-name: X-CAPTCHA
+environments:
+  Default: http://127.0.0.1:3000
+error-discrimination:
+  strategy: status-code
+headers:
+  X-Secret-Key:
+    name: secretKey
+    type: string
+name: api

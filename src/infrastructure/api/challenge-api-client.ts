@@ -1,8 +1,8 @@
-import type { IChallenge, IChallengeSolveRequest, IChallengeSolveResponse, IChallengeValidationRequest, IChallengeValidationResult } from "../../domain";
+import type { ECaptchaType, IChallenge, IChallengeSolveRequest, IChallengeSolveResponse, IChallengeValidationRequest, IChallengeValidationResult } from "../../domain";
 import type { IChallengeApiClient } from "../interface";
 
 /**
- * Implementation of the captcha API client
+ * Implementation of the challenge API client
  */
 export class ChallengeApiClient implements IChallengeApiClient {
 	private readonly PUBLIC_KEY: string;
@@ -19,10 +19,10 @@ export class ChallengeApiClient implements IChallengeApiClient {
 
 	/**
 	 * Create a new captcha challenge
-	 * @param {string} type - The type of challenge to create
+	 * @param {ECaptchaType} type - The type of challenge to create
 	 * @returns {Promise<IChallenge>} The captcha challenge
 	 */
-	async createChallenge(type: string): Promise<IChallenge> {
+	async createChallenge(type: ECaptchaType): Promise<IChallenge> {
 		// eslint-disable-next-line @elsikora/node/no-unsupported-features/node-builtins
 		const response: Response = await fetch(`${this.apiUrl}/v1/challenge`, {
 			body: JSON.stringify({ type }),

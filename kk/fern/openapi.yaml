@@ -1,0 +1,1263 @@
+openapi: 3.0.0
+paths:
+  /v1/challenge/{challenge}/solve:
+    post:
+      description: This method is used for solving `Challenge`
+      operationId: solve
+      parameters:
+        - name: challenge
+          required: true
+          in: path
+          description: Challenge identifier
+          schema:
+            minLength: 36
+            maxLength: 36
+            format: uuid
+            pattern: >-
+              ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+            nullable: false
+            example: 2559c4b6-98a3-4f60-a6bc-13e22ccf2908
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChallengeSolveRequestBody"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeSolveResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionBadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionUnauthorized"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionNotFound"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionInternalServerError"
+      security:
+        - publicAuthorization: []
+      summary: Solving `Challenge`
+      tags:
+        - Challenge
+  /v1/challenge/{challenge}/verify:
+    post:
+      description: This method is used for verifying `Challenge`
+      operationId: verify
+      parameters:
+        - name: challenge
+          required: true
+          in: path
+          description: Challenge identifier
+          schema:
+            minLength: 36
+            maxLength: 36
+            format: uuid
+            pattern: >-
+              ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+            nullable: false
+            example: d9c2a6b1-0e75-4a57-8197-82ab105539a2
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChallengeVerifyRequestBody"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeVerifyResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionBadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionUnauthorized"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionNotFound"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionInternalServerError"
+      security:
+        - secretAuthorization: []
+      summary: Verifying `Challenge`
+      tags:
+        - Challenge
+  /v1/challenge:
+    post:
+      description: This method is used for creating `Challenge`
+      operationId: create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChallengeCreateBody"
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeCreateResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionUnauthorized"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionInternalServerError"
+      security:
+        - publicAuthorization: []
+      summary: Creating `Challenge`
+      tags:
+        - Challenge
+info:
+  title: X-CAPTCHA
+  description: X-CAPTCHA `Reaper API` documentation
+  version: "1"
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: ""
+tags: []
+servers:
+  - url: http://127.0.0.1:3000
+components:
+  securitySchemes:
+    publicAuthorization:
+      type: apiKey
+      in: header
+      name: X-Public-Key
+      description: Public key
+    secretAuthorization:
+      type: apiKey
+      in: header
+      name: X-Secret-Key
+      description: Secret key
+  schemas:
+    ChallengeCreateBody:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Challenge type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+      required:
+        - type
+    ChallengeCreateBodyclient:
+      type: object
+      properties: {}
+    ChallengeCreateResponseDataClick:
+      type: object
+      properties:
+        challenge:
+          type: boolean
+          description: Challenge data click challenge
+          nullable: false
+          example: true
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - challenge
+        - type
+    ChallengeCreateResponseDataPow:
+      type: object
+      properties:
+        challenge:
+          type: string
+          description: Challenge data PoW challenge
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+          readOnly: true
+        difficulty:
+          type: integer
+          description: Challenge data difficulty
+          format: int32
+          nullable: false
+          example: 1
+          minimum: 0
+          maximum: 32
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - challenge
+        - difficulty
+        - type
+    ChallengeCreateResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: Challenge creation date
+          nullable: false
+          minLength: 24
+          maxLength: 24
+          example: "2025-01-01T00:00:00.000Z"
+          pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$
+          format: date-time
+          readOnly: true
+        data:
+          description: Challenge data
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeCreateResponseDataClick"
+            - $ref: "#/components/schemas/ChallengeCreateResponseDataPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeCreateResponseDataClick"
+              pow: "#/components/schemas/ChallengeCreateResponseDataPow"
+            propertyName: type
+          readOnly: true
+        id:
+          type: string
+          description: Challenge identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: a84892b9-03e2-4238-90bc-1e48b136cb80
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        type:
+          type: string
+          description: Challenge type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Challenge last update date
+          nullable: false
+          minLength: 24
+          maxLength: 24
+          example: "2025-01-01T00:00:00.000Z"
+          pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$
+          format: date-time
+          readOnly: true
+      required:
+        - createdAt
+        - data
+        - id
+        - type
+        - updatedAt
+    ChallengeUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Challenge identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: dddde885-41f0-418e-81ed-8e3bc544d983
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+      required:
+        - id
+    ChallengeUpdateBodyclient:
+      type: object
+      properties: {}
+    ChallengeUpdateBodyDataClick:
+      type: object
+      properties:
+        challenge:
+          type: boolean
+          description: Challenge data click challenge
+          nullable: false
+          example: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+      required:
+        - challenge
+        - type
+    ChallengeUpdateBodyDataPow:
+      type: object
+      properties:
+        challenge:
+          type: string
+          description: Challenge data PoW challenge
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+        difficulty:
+          type: integer
+          description: Challenge data difficulty
+          format: int32
+          nullable: false
+          example: 1
+          minimum: 0
+          maximum: 32
+          multipleOf: 1
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+      required:
+        - challenge
+        - difficulty
+        - type
+    ChallengeUpdateBodySolutionClick:
+      type: object
+      properties:
+        data:
+          type: boolean
+          description: Challenge solution click data
+          nullable: false
+          example: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+      required:
+        - data
+        - type
+    ChallengeUpdateBodySolutionPow:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: Challenge solution PoW hash
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+        nonce:
+          type: string
+          description: Challenge solution PoW nonce
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+      required:
+        - hash
+        - nonce
+        - type
+    ChallengeUpdateBody:
+      type: object
+      properties:
+        data:
+          description: Challenge data
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeUpdateBodyDataClick"
+            - $ref: "#/components/schemas/ChallengeUpdateBodyDataPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeUpdateBodyDataClick"
+              pow: "#/components/schemas/ChallengeUpdateBodyDataPow"
+            propertyName: type
+        isSolved:
+          type: boolean
+          description: Challenge solved state
+          nullable: false
+          example: true
+        solution:
+          description: Challenge solution
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeUpdateBodySolutionClick"
+            - $ref: "#/components/schemas/ChallengeUpdateBodySolutionPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeUpdateBodySolutionClick"
+              pow: "#/components/schemas/ChallengeUpdateBodySolutionPow"
+            propertyName: type
+        token:
+          type: string
+          description: Challenge solution token
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: 185e9967-d3e9-40f7-93d4-1ff23376d453
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+        type:
+          type: string
+          description: Challenge type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+        client:
+          type: string
+          description: Challenge client
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: acbda616-d1a9-4a9f-8326-f5a375aa62ee
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+      required:
+        - data
+        - isSolved
+        - solution
+        - token
+        - type
+        - client
+    ChallengeUpdateResponseDataClick:
+      type: object
+      properties:
+        challenge:
+          type: boolean
+          description: Challenge data click challenge
+          nullable: false
+          example: true
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - challenge
+        - type
+    ChallengeUpdateResponseDataPow:
+      type: object
+      properties:
+        challenge:
+          type: string
+          description: Challenge data PoW challenge
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+          readOnly: true
+        difficulty:
+          type: integer
+          description: Challenge data difficulty
+          format: int32
+          nullable: false
+          example: 1
+          minimum: 0
+          maximum: 32
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - challenge
+        - difficulty
+        - type
+    ChallengeUpdateResponseSolutionClick:
+      type: object
+      properties:
+        data:
+          type: boolean
+          description: Challenge solution click data
+          nullable: false
+          example: true
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - data
+        - type
+    ChallengeUpdateResponseSolutionPow:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: Challenge solution PoW hash
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+          readOnly: true
+        nonce:
+          type: string
+          description: Challenge solution PoW nonce
+          nullable: false
+          maxLength: 32
+          minLength: 32
+          example: 683d2b8b9b06b518de4b55e6f289e5fd
+          format: lowercase-string
+          pattern: ^[a-f0-9]{32}
+          readOnly: true
+        type:
+          type: string
+          description: Challenge data type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+      required:
+        - hash
+        - nonce
+        - type
+    ChallengeUpdateResponseClient:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Challenge identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: c57a4f33-82c0-4a10-ab35-dcbbdc670eee
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+      required:
+        - id
+    ChallengeUpdateResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: Challenge creation date
+          nullable: false
+          minLength: 24
+          maxLength: 24
+          example: "2025-01-01T00:00:00.000Z"
+          pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$
+          format: date-time
+          readOnly: true
+        data:
+          description: Challenge data
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeUpdateResponseDataClick"
+            - $ref: "#/components/schemas/ChallengeUpdateResponseDataPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeUpdateResponseDataClick"
+              pow: "#/components/schemas/ChallengeUpdateResponseDataPow"
+            propertyName: type
+          readOnly: true
+        id:
+          type: string
+          description: Challenge identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: cf6cd7dc-670e-4d42-8f86-539ccdfd68a7
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        isSolved:
+          type: boolean
+          description: Challenge solved state
+          nullable: false
+          example: true
+          readOnly: true
+        solution:
+          description: Challenge solution
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeUpdateResponseSolutionClick"
+            - $ref: "#/components/schemas/ChallengeUpdateResponseSolutionPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeUpdateResponseSolutionClick"
+              pow: "#/components/schemas/ChallengeUpdateResponseSolutionPow"
+            propertyName: type
+          readOnly: true
+        token:
+          type: string
+          description: Challenge solution token
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: 8b75532d-2914-4489-a34e-5809acceeaeb
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        type:
+          type: string
+          description: Challenge type
+          nullable: false
+          example: click
+          enum:
+            - click
+            - pow
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Challenge last update date
+          nullable: false
+          minLength: 24
+          maxLength: 24
+          example: "2025-01-01T00:00:00.000Z"
+          pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$
+          format: date-time
+          readOnly: true
+        client:
+          description: Challenge client
+          nullable: false
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/ChallengeUpdateResponseClient"
+      required:
+        - createdAt
+        - data
+        - id
+        - isSolved
+        - solution
+        - token
+        - type
+        - updatedAt
+        - client
+    ChallengeSolveRequestBody:
+      type: object
+      properties:
+        solution:
+          description: Challenge solution
+          nullable: false
+          oneOf:
+            - $ref: "#/components/schemas/ChallengeUpdateBodySolutionClick"
+            - $ref: "#/components/schemas/ChallengeUpdateBodySolutionPow"
+          discriminator:
+            mapping:
+              click: "#/components/schemas/ChallengeUpdateBodySolutionClick"
+              pow: "#/components/schemas/ChallengeUpdateBodySolutionPow"
+            propertyName: type
+      required:
+        - solution
+    ChallengeSolveResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Challenge solution token
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: c92fcfad-e00c-418f-bcb8-633687d12a73
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+      required:
+        - token
+    ExceptionBadRequest:
+      type: object
+      properties:
+        correlationID:
+          type: string
+          description: Correlation identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: 3d0fba9d-47df-4117-82b1-2281cc732d73
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        error:
+          type: string
+          description: Error name
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: BadRequest
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        message:
+          type: string
+          description: Error message
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: Error message
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        statusCode:
+          type: number
+          description: Error status code
+          nullable: false
+          example: 400
+          enum:
+            - 100
+            - 101
+            - 102
+            - 103
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+            - 207
+            - 208
+            - 210
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 307
+            - 308
+            - 400
+            - 401
+            - 402
+            - 403
+            - 404
+            - 405
+            - 406
+            - 407
+            - 408
+            - 409
+            - 410
+            - 411
+            - 412
+            - 413
+            - 414
+            - 415
+            - 416
+            - 417
+            - 418
+            - 421
+            - 422
+            - 423
+            - 424
+            - 428
+            - 429
+            - 456
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+            - 507
+            - 508
+          readOnly: true
+        timestamp:
+          type: integer
+          description: Error timestamp
+          format: int64
+          nullable: false
+          example: 1743045631586
+          minimum: 0
+          maximum: 2147483647000
+          readOnly: true
+      required:
+        - correlationID
+        - error
+        - message
+        - statusCode
+        - timestamp
+    ExceptionUnauthorized:
+      type: object
+      properties:
+        correlationID:
+          type: string
+          description: Correlation identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: b522e5ac-4e74-481f-8814-3a9595fb59a5
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        error:
+          type: string
+          description: Error name
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: Unauthorized
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        message:
+          type: string
+          description: Error message
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: Error message
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        statusCode:
+          type: number
+          description: Error status code
+          nullable: false
+          example: 401
+          enum:
+            - 100
+            - 101
+            - 102
+            - 103
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+            - 207
+            - 208
+            - 210
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 307
+            - 308
+            - 400
+            - 401
+            - 402
+            - 403
+            - 404
+            - 405
+            - 406
+            - 407
+            - 408
+            - 409
+            - 410
+            - 411
+            - 412
+            - 413
+            - 414
+            - 415
+            - 416
+            - 417
+            - 418
+            - 421
+            - 422
+            - 423
+            - 424
+            - 428
+            - 429
+            - 456
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+            - 507
+            - 508
+          readOnly: true
+        timestamp:
+          type: integer
+          description: Error timestamp
+          format: int64
+          nullable: false
+          example: 1743045631587
+          minimum: 0
+          maximum: 2147483647000
+          readOnly: true
+      required:
+        - correlationID
+        - error
+        - message
+        - statusCode
+        - timestamp
+    ExceptionNotFound:
+      type: object
+      properties:
+        correlationID:
+          type: string
+          description: Correlation identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: b7517629-962d-4653-9db2-52301487f8af
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        error:
+          type: string
+          description: Error name
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: NotFound
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        message:
+          type: string
+          description: Error message
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: Error message
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        statusCode:
+          type: number
+          description: Error status code
+          nullable: false
+          example: 404
+          enum:
+            - 100
+            - 101
+            - 102
+            - 103
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+            - 207
+            - 208
+            - 210
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 307
+            - 308
+            - 400
+            - 401
+            - 402
+            - 403
+            - 404
+            - 405
+            - 406
+            - 407
+            - 408
+            - 409
+            - 410
+            - 411
+            - 412
+            - 413
+            - 414
+            - 415
+            - 416
+            - 417
+            - 418
+            - 421
+            - 422
+            - 423
+            - 424
+            - 428
+            - 429
+            - 456
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+            - 507
+            - 508
+          readOnly: true
+        timestamp:
+          type: integer
+          description: Error timestamp
+          format: int64
+          nullable: false
+          example: 1743045631585
+          minimum: 0
+          maximum: 2147483647000
+          readOnly: true
+      required:
+        - correlationID
+        - error
+        - message
+        - statusCode
+        - timestamp
+    ExceptionInternalServerError:
+      type: object
+      properties:
+        correlationID:
+          type: string
+          description: Correlation identifier
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: eba46d04-eea2-4836-856a-1760d6c8adaa
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+          readOnly: true
+        error:
+          type: string
+          description: Error name
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: InternalServerError
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        message:
+          type: string
+          description: Error message
+          nullable: false
+          maxLength: 64
+          minLength: 3
+          example: Error message
+          format: string
+          pattern: ^[a-zA-Z_ ]{3,64}$
+          readOnly: true
+        statusCode:
+          type: number
+          description: Error status code
+          nullable: false
+          example: 500
+          enum:
+            - 100
+            - 101
+            - 102
+            - 103
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+            - 207
+            - 208
+            - 210
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 307
+            - 308
+            - 400
+            - 401
+            - 402
+            - 403
+            - 404
+            - 405
+            - 406
+            - 407
+            - 408
+            - 409
+            - 410
+            - 411
+            - 412
+            - 413
+            - 414
+            - 415
+            - 416
+            - 417
+            - 418
+            - 421
+            - 422
+            - 423
+            - 424
+            - 428
+            - 429
+            - 456
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+            - 507
+            - 508
+          readOnly: true
+        timestamp:
+          type: integer
+          description: Error timestamp
+          format: int64
+          nullable: false
+          example: 1743045631588
+          minimum: 0
+          maximum: 2147483647000
+          readOnly: true
+      required:
+        - correlationID
+        - error
+        - message
+        - statusCode
+        - timestamp
+    ChallengeVerifyRequestBody:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Challenge solution token
+          nullable: false
+          minLength: 36
+          maxLength: 36
+          example: 6dd245b7-793d-406a-872a-09811fc65d5d
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+
+
+      required:
+        - token
+    ChallengeVerifyResponse:
+      type: object
+      properties:
+        isSolved:
+          type: boolean
+          description: Challenge solved status
+          nullable: false
+          example: true
+          readOnly: true
+      required:
+        - isSolved
